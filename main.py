@@ -1,4 +1,3 @@
-import inputs
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
 
@@ -9,6 +8,7 @@ import multiprocessing
 
 from modules.gamepad_functions import *
 from modules.Tray import SystemTray
+import modules.inputs as inputs
 
 class Tray(SystemTray):
 	def	exit(self):
