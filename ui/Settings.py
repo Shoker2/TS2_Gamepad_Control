@@ -76,6 +76,7 @@ class Ui_SettingsWindow(QMainWindow):
 		'up',
 		'down',
 	]
+	
 	gamepad_keys = [
 		'A',
 		'B',
