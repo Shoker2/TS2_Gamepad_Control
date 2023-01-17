@@ -25,10 +25,10 @@ class Settings_UI(Ui_SettingsWindow):
 
 		self.checkBox.setChecked(bool(int(config.read('General', 'startup'))))
 
-		hotkey = config.read('General', 'turn_of_off_hotkey').split('+')
+		hotkey = config.read('General', 'turn_on_off_hotkey').split('+')
 		try:
-			self.firstTurn_on_ofKeysComboBox.setCurrentText(hotkey[0].replace('_', ' '))
-			self.secondTurn_on_ofKeysComboBox.setCurrentText(hotkey[1].replace('_', ' '))
+			self.firstTurn_on_ofKeysComboBox.setCurrentText(list(self.gamepad_keys.keys())[list(self.gamepad_keys.values()).index(hotkey[0])])
+			self.secondTurn_on_ofKeysComboBox.setCurrentText(list(self.gamepad_keys.keys())[list(self.gamepad_keys.values()).index(hotkey[1])])
 		except IndexError:
 			pass
 	
@@ -51,9 +51,9 @@ class Settings_UI(Ui_SettingsWindow):
 		config.update('General', 'mouse_speed', str(self.mouseSpeedSpinBox.value()))
 		config.update('General', 'scroll_speed', str(self.scrollSpeedSpinBox.value()))
 
-		hotkey = f'{self.firstTurn_on_ofKeysComboBox.currentText()}+{self.secondTurn_on_ofKeysComboBox.currentText()}'
+		hotkey = f'{self.gamepad_keys[self.firstTurn_on_ofKeysComboBox.currentText()]}+{self.gamepad_keys[self.secondTurn_on_ofKeysComboBox.currentText()]}'
 
-		config.update('General', 'turn_of_off_hotkey', hotkey.replace(' ', '_'))
+		config.update('General', 'turn_on_off_hotkey', hotkey)
 
 	def apply_key(self):
 		# После нажатия кнопки "Apply" во вкладки Key я сохраняю данные для выбранной кнопки геймпада в конфиг файл
@@ -62,14 +62,18 @@ class Settings_UI(Ui_SettingsWindow):
 		config.update(key['key'], 'use_command', key['use_command'])
 		config.update(key['key'], 'use_hotkey', key['use_hotkey'])
 		config.update(key['key'], 'command', key['command'])
-		config.update(key['key'], 'hoykey', key['hotkey'])
+		config.update(key['key'], 'hotkey', key['hotkey'])
 
 	def set_key_properties(self):
 		# После выбора кнопки геймпада из выпадающего списка устанавливается информация о кнопке из конфиг файла
-		key = self.gamepadKeyComboBox.currentText().replace(' ', '_')
+		key = self.gamepad_keys[self.gamepadKeyComboBox.currentText()]
 
 		self.useHotkeyRadioButton.setChecked(bool(int(config.read(key, 'use_hotkey'))))
-		hotkey = config.read(key, 'hoykey').split('+')
+		hotkey = config.read(key, 'hotkey').split('+')
+
+		self.firstKeyComboBox.setCurrentText('NO KEY')
+		self.secondKeyComboBox.setCurrentText('NO KEY')
+		self.thirdKeyComboBox.setCurrentText('NO KEY')
 
 		try:
 			self.firstKeyComboBox.setCurrentText(hotkey[0])
@@ -154,7 +158,7 @@ class MainKeys(Keys):
 	def btn_function(self, key, state):
 		if config.read('General', 'activate') == '1':
 
-			if config.read(key, 'use_command') == '1': # Если нужно выполнить команду, то создаёь процесс и запускает в нёи эту команду
+			if config.read(key, 'use_command') == '1': # Если нужно выполнить команду, то создаёт процесс и запускает в нёи эту команду
 				if state == 1:
 					global test_process
 					try:
@@ -166,27 +170,30 @@ class MainKeys(Keys):
 				
 			elif config.read(key, 'use_hotkey') == '1': # Если используется комбинация клавишь
 				mouse_keys = {
-					'LBM':'left',
-					'MBM':'middle',
-					'RBM':'right'
+					'LMB':'left',
+					'MMB':'middle',
+					'RMB':'right'
 				}
 
-				hotkey = config.read(key, 'hoykey')
+				hotkeys = config.read(key, 'hotkey')
 
-				mouse_ = ['RBM', 'LBM', 'MBM']
+				mouse_ = ['RMB', 'LMB', 'MMB']
 				notkeyboard = mouse_
 				
-				if hotkey not in notkeyboard: # Если это не действия с мышкой, то используются горячие клавишы клавиатуры
-					if state == 1:
-						keyboard.press(hotkey)
-					else:
-						keyboard.release(hotkey)
-				elif hotkey in mouse_:
-					if state == 1:
-						mouse.press(mouse_keys[hotkey])
-						time.sleep(0.01)
-					else:
-						mouse.release(mouse_keys[hotkey])
+				for hotkey in list(map(str, hotkeys.split('+'))):
+					hotkey = Settings_UI.keyboard_keys[hotkey]
+
+					if hotkey not in notkeyboard: # Если это не действия с мышкой, то используются горячие клавишы клавиатуры
+						if state == 1:
+							keyboard.press(hotkey)
+						else:
+							keyboard.release(hotkey)
+					elif hotkey in mouse_:
+						if state == 1:
+							mouse.press(mouse_keys[hotkey])
+							time.sleep(0.01)
+						else:
+							mouse.release(mouse_keys[hotkey])
 
 	@check_dead_zone
 	def left_stick_x(self, state):
@@ -240,9 +247,9 @@ def main():
 
 				hotkey_pressed = sorted(hotkey_pressed) # Сортирую список нажатых клавиш
 
-				turn_of_off_hotkey = sorted(config.read('General', 'turn_of_off_hotkey').split('+')) # Беру отсортированый список комбинации клавиш
+				turn_on_off_hotkey = sorted(config.read('General', 'turn_on_off_hotkey').split('+')) # Беру отсортированый список комбинации клавиш
 
-				if turn_of_off_hotkey == hotkey_pressed:	# Если комбинация клавиш подходит, то когда она не будет подходить, сработает нужное действие
+				if turn_on_off_hotkey == hotkey_pressed:	# Если комбинация клавиш подходит, то когда она не будет подходить, сработает нужное действие
 					next_action = 1
 				else:
 					if next_action == 1:

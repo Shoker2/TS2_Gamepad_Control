@@ -13,103 +13,103 @@ class Configure:
 				'ABS_deadzone': '8',
 				'mouse_speed': '10',
 				'scroll_speed': '10',
-				'turn_of_off_hotkey': 'Start+Back'
+				'turn_on_off_hotkey': 'Start+Back'
 			}
 			self.config['Left_Stick'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['Right_Stick'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['D_Pad_up'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['D_Pad_left'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['D_Pad_right'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['D_Pad_down'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['A'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['B'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['X'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['Y'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['Back'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['Start'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['RB'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['RT'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['LB'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			self.config['LT'] = {
 				'use_command': '0',
 				'use_hotkey': '0',
-				'command': 'osk',
-				'hoykey': 'esc'
+				'command': '',
+				'hotkey': 'No Key'
 			}
 			
 			self.write()

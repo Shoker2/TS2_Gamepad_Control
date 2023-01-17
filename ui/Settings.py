@@ -15,86 +15,118 @@ from PyQt5.QtWidgets import QMainWindow
 class Ui_SettingsWindow(QMainWindow):
 	resized = QtCore.pyqtSignal()
 
-	keyboard_keys = [
-		'No Key',
-		'Esc',
-		'A',
-		'B',
-		'C',
-		'D',
-		'E',
-		'F',
-		'G',
-		'H',
-		'I',
-		'J',
-		'K',
-		'L',
-		'M',
-		'N',
-		'O',
-		'P',
-		'Q',
-		'R',
-		'S',
-		'T',
-		'U',
-		'V',
-		'W',
-		'X',
-		'Y',
-		'Z',
-		'Space',
-		'Ctrl',
-		'Alt',
-		'Enter',
-		'0',
-		'1',
-		'2',
-		'3',
-		'4',
-		'5',
-		'6',
-		'7',
-		'8',
-		'9',
-		'F0',
-		'F1',
-		'F2',
-		'F3',
-		'F4',
-		'F5',
-		'F6',
-		'F7',
-		'F8',
-		'F9',
-		'LBM',
-		'RBM',
-		'MBM',
-		'left',
-		'right',
-		'up',
-		'down',
-	]
+	keyboard_keys = {
+		'NO KEY': 'NO KEY',
+		'ALT': 'alt',
+		'RIGHT ALT': 'right alt',
+		'BACKSPACE': 'backspace',
+		'PAUSE': 'pause',
+		'CAPS LOCK': 'caps lock',
+		'CTRL': 'ctrl',
+		'DELETE': 'delete',
+		'DOWN ARROW': 'down',
+		'UP ARROW': 'up',
+		'LEFT ARROW': 'left',
+		'RIGHT ARROW': 'right',
+		'END': 'end',
+		'ENTER': 'enter',
+		'ESC': 'esc',
+		'HOME': 'home',
+		'INSERT': 'insert',
+		'NUM LOCK': 'num lock',
+		'PAGE UP': 'page up',
+		'PAGE DOWN': 'page down',
+		'PRINT SCREEN': 'print screen',
+		'SCROLL LOCK': 'scroll lock',
+		'SHIFT': 'shift',
+		'RIGHT SHIFT': 'right shift',
+		'SPACE': 'space',
+		'TAB': 'tab',
+		'LEFT WINDOWS': 'left windows',
+		'RIGHT WINDOWS': 'right windows',
+		"'": "'",
+		'~': '~',
+		'"': '"',
+		'-': '-',
+		'.': '.',
+		'/': '/',
+		'[': '[',
+		']': ']',
+		'\\': '\\',
+		';': ';',
+		':': ':',
+		',': ',',
+		'=': '=',
+		'MULTIPLY': '*',
+		'ADD': '+',
+		'0': '0',
+		'1': '1',
+		'2': '2',
+		'3': '3',
+		'4': '4',
+		'5': '5',
+		'6': '6',
+		'7': '7',
+		'8': '8',
+		'9': '9',
+		'A': 'a',
+		'B': 'b',
+		'C': 'c',
+		'D': 'd',
+		'E': 'e',
+		'F': 'f',
+		'G': 'g',
+		'H': 'h',
+		'I': 'i',
+		'J': 'j',
+		'K': 'k',
+		'L': 'l',
+		'M': 'm',
+		'N': 'n',
+		'O': 'o',
+		'P': 'p',
+		'Q': 'q',
+		'R': 'r',
+		'S': 's',
+		'T': 't',
+		'U': 'u',
+		'V': 'v',
+		'W': 'w',
+		'X': 'x',
+		'Y': 'y',
+		'Z': 'z',
+		'F1': 'f1',
+		'F2': 'f2',
+		'F3': 'f3',
+		'F4': 'f4',
+		'F5': 'f5',
+		'F6': 'f6',
+		'F7': 'f7',
+		'F8': 'f8',
+		'F9': 'f9',
+		'F10': 'f10',
+		'F11': 'f11',
+		'F12': 'f12'
+		}
 	
-	gamepad_keys = [
-		'A',
-		'B',
-		'X',
-		'Y',
-		'D Pad up',
-		'D Pad left',
-		'D Pad right',
-		'D Pad down',
-		'Back',
-		'Start',
-		'Left Stick',
-		'Right Stick',
-		'RB',
-		'RT',
-		'LB',
-		'LT',
-	]
+	gamepad_keys = {
+		'A': 'A',
+		'B': 'B',
+		'X': 'X',
+		'Y': 'Y',
+		'D-Pad up': 'D_Pad_up',
+		'D-Pad left': 'D_Pad_left',
+		'D-Pad right': 'D_Pad_right',
+		'D-Pad down': 'D_Pad_down',
+		'Back': 'Back',
+		'Start': 'Start',
+		'Left Stick': 'Left_Stick',
+		'Right Stick': 'Right_Stick',
+		'Right Button': 'RB',
+		'Right Trigger': 'RT',
+		'Left Button': 'LB',
+		'Left Trigger': 'LT'
+	}
 
 	def __init__(self, SettingsWindow, icon_path = ''):
 		super(Ui_SettingsWindow, self).__init__()
@@ -346,12 +378,12 @@ class Ui_SettingsWindow(QMainWindow):
 		pass
 	
 	def setup(self):
-		for key in self.keyboard_keys:
+		for key in self.keyboard_keys.keys():
 			self.firstKeyComboBox.addItem(key)
 			self.secondKeyComboBox.addItem(key)
 			self.thirdKeyComboBox.addItem(key)
 		
-		for btn in self.gamepad_keys:
+		for btn in self.gamepad_keys.keys():
 			self.gamepadKeyComboBox.addItem(btn)
 			self.firstTurn_on_ofKeysComboBox.addItem(btn)
 			self.secondTurn_on_ofKeysComboBox.addItem(btn)
@@ -361,10 +393,10 @@ class Ui_SettingsWindow(QMainWindow):
 
 	def get_key_properties(self):
 		key = {}
-		key['key'] = self.gamepadKeyComboBox.currentText().replace(' ', '_')
+		key['key'] = self.gamepad_keys[self.gamepadKeyComboBox.currentText()]
 		key['use_hotkey'] = str(int(self.useHotkeyRadioButton.isChecked()))
 		key['hotkey'] = f'{self.firstKeyComboBox.currentText()}+{self.secondKeyComboBox.currentText()}+{self.thirdKeyComboBox.currentText()}'
-		key['hotkey'] = key['hotkey'].replace('No Key', '').strip('+')
+		key['hotkey'] = key['hotkey'].replace('NO KEY', '').strip('+').replace('++', '+')
 		key['use_command'] = str(int(self.useCmdRadioButton.isChecked()))
 		key['command'] = self.cmdLineEdit.text()
 
