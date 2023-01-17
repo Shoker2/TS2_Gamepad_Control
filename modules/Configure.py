@@ -9,7 +9,10 @@ class Configure:
 		if not os.path.isfile(self.config_path):
 			self.config['General'] = {
 				'activate': '1',
+				'startup': '0',
 				'ABS_deadzone': '8',
+				'mouse_speed': '10',
+				'scroll_speed': '10',
 				'turn_of_off_hotkey': 'Start+Back'
 			}
 			self.config['Left_Stick'] = {
