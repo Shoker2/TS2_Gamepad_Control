@@ -348,8 +348,8 @@ def main():
 
 		except inputs.UnpluggedError as r:
 			inputs.refresh_devices()
-			os.system('cls')
-			print(r)
+			# os.system('cls')
+			# print(r)
 			time.sleep(1.5)
 		
 		except Exception:
