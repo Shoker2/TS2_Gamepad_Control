@@ -11,69 +11,69 @@ class Configure:
 				'activate': '1',
 				'startup': '0',
 				'ABS_deadzone': '8',
-				'mouse_speed': '10',
-				'scroll_speed': '10',
+				'mouse_speed': '7',
+				'scroll_speed': '7',
 				'turn_on_off_hotkey': 'Start+Back'
 			}
 			self.config['Left_Stick'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'MIDDLE MOUSE BUTTON'
 			}
 			self.config['Right_Stick'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'MIDDLE MOUSE BUTTON'
 			}
 			self.config['D_Pad_up'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'UP ARROW'
 			}
 			self.config['D_Pad_left'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'LEFT ARROW'
 			}
 			self.config['D_Pad_right'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'RIGHT ARROW'
 			}
 			self.config['D_Pad_down'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'DOWN ARROW'
 			}
 			self.config['A'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'RIGHT MOUSE BUTTON'
 			}
 			self.config['B'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'BACKSPACE'
 			}
 			self.config['X'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'LEFT MOUSE BUTTON'
 			}
 			self.config['Y'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'ESC'
 			}
 			self.config['Back'] = {
 				'use_command': '0',
