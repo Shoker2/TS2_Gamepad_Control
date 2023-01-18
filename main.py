@@ -3,13 +3,14 @@ from PyQt5.QtGui import QIcon
 from PyQt5 import QtWidgets
 import mouse
 import keyboard
+from win32com.client import Dispatch
 
 import sys
 import time
 import os
 import threading
 import traceback
-import winreg
+import getpass
 
 from modules.gamepad_functions import *
 from ui.Tray import SystemTray
@@ -19,6 +20,18 @@ import modules.inputs as inputs
 from modules.Logger import Logger
 
 logger = Logger('log_records.csv') # Логирование
+
+def create_shortcut(file_name: str, target_name: str, work_dir: str, arguments: str = ''):
+	this_folder_path = os.path.dirname(os.path.abspath(__file__))
+
+	shell = Dispatch('WScript.Shell')
+	shortcut = shell.CreateShortCut(file_name)
+	shortcut.TargetPath = f'{this_folder_path}\\{target_name}'
+	shortcut.Arguments = arguments
+	shortcut.WorkingDirectory = work_dir
+	shortcut.save()
+
+	os.replace(f"{this_folder_path}\\{file_name}", f"{work_dir}\\{file_name}")
 
 class Settings_UI(Ui_SettingsWindow):
 	def setup(self):
@@ -61,15 +74,13 @@ class Settings_UI(Ui_SettingsWindow):
 			startup = self.checkBox.isChecked()
 			config.update('General', 'startup', str(int(startup)))
 
-			file_path = str(os.path.dirname(os.path.abspath(__file__))) + '\\TS2GamepadControl.exe' # Получаю путь к файлу запуска приложения
-			key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Run') # создаю ключ для автозапуска в реестре
+			USER_NAME = getpass.getuser()
+			startup_path = f'C:\\Users\\{USER_NAME}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup'
+
 			if startup:
-				winreg.SetValueEx(key, 'TS2GamepadControl', 0, winreg.REG_SZ, file_path) # Добавляю приложение в автозапуск (в реестре)
+				create_shortcut('TS2_Gamepad_Control.lnk', 'TS2GamepadControl.exe', startup_path)
 			else:
-				try:
-					winreg.DeleteValue(key, 'TS2GamepadControl') # Удаляю приложение из автозапуска (В реестре)
-				except FileNotFoundError:
-					pass
+				os.remove(f'{startup_path}\\TS2_Gamepad_Control.lnk') # Удаляю приложение из автозапуска
 
 			config.update('General', 'abs_deadzone', str(self.deadzoneSpeedSpinBox.value()))
 			config.update('General', 'mouse_speed', str(self.mouseSpeedSpinBox.value()))
