@@ -21,17 +21,17 @@ from modules.Logger import Logger
 
 logger = Logger('log_records.csv') # Логирование
 
-def create_shortcut(file_name: str, target_name: str, work_dir: str, arguments: str = ''):
+def create_shortcut(file_name: str, target_name: str, target_dir: str, arguments: str = ''):
 	this_folder_path = os.path.dirname(os.path.abspath(__file__))
 
 	shell = Dispatch('WScript.Shell')
 	shortcut = shell.CreateShortCut(file_name)
 	shortcut.TargetPath = f'{this_folder_path}\\{target_name}'
 	shortcut.Arguments = arguments
-	shortcut.WorkingDirectory = work_dir
+	shortcut.WorkingDirectory = this_folder_path
 	shortcut.save()
 
-	os.replace(f"{this_folder_path}\\{file_name}", f"{work_dir}\\{file_name}")
+	os.replace(f"{this_folder_path}\\{file_name}", f"{target_dir}\\{file_name}")
 
 class Settings_UI(Ui_SettingsWindow):
 	def setup(self):
