@@ -55,19 +55,19 @@ class Configure:
 				'use_command': '0',
 				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'RIGHT MOUSE BUTTON'
+				'hotkey': 'LEFT MOUSE BUTTON'
 			}
 			self.config['B'] = {
 				'use_command': '0',
 				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'BACKSPACE'
+				'hotkey': 'RIGHT MOUSE BUTTON'
 			}
 			self.config['X'] = {
 				'use_command': '0',
 				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'LEFT MOUSE BUTTON'
+				'hotkey': 'BACKSPACE'
 			}
 			self.config['Y'] = {
 				'use_command': '0',
