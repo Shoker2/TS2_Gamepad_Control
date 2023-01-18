@@ -24,9 +24,23 @@ class Settings_UI(Ui_SettingsWindow):
 	def setup(self):
 		try:
 			super().setup()
-			self.mouseSpeedSpinBox.setValue(int(config.read('General', 'mouse_speed')))
-			self.scrollSpeedSpinBox.setValue(int(config.read('General', 'scroll_speed')))
-			self.deadzoneSpeedSpinBox.setValue(int(config.read('General', 'abs_deadzone')))
+			try:
+				mouse_speed = config.read('General', 'mouse_speed')
+				self.mouseSpeedSpinBox.setValue(int(mouse_speed))
+			except Exception:
+				logger.logging.error(traceback.format_exc().replace('"', '\''))
+
+			try:	
+				scroll_speed = config.read('General', 'scroll_speed')
+				self.scrollSpeedSpinBox.setValue(int(scroll_speed))
+			except Exception:
+				logger.logging.error(traceback.format_exc().replace('"', '\''))
+			
+			try:
+				abs_deadzone = config.read('General', 'abs_deadzone')
+				self.deadzoneSpeedSpinBox.setValue(int(abs_deadzone))
+			except Exception:
+				logger.logging.error(traceback.format_exc().replace('"', '\''))
 
 			self.checkBox.setChecked(bool(int(config.read('General', 'startup'))))
 
@@ -297,7 +311,12 @@ def main():
 
 				hotkey_pressed = sorted(hotkey_pressed) # Сортирую список нажатых клавиш
 
-				turn_on_off_hotkey = config.read('General', 'turn_on_off_hotkey') # Беру отсортированый список комбинации клавиш
+				try:
+					turn_on_off_hotkey = config.read('General', 'turn_on_off_hotkey') # Беру отсортированый список комбинации клавиш
+				except Exception:
+					logger.logging.error(traceback.format_exc().replace('"', '\''))
+					turn_on_off_hotkey = 'Start+Back'
+
 				turn_on_off_hotkey = sorted(turn_on_off_hotkey.split('+'))
 
 				if turn_on_off_hotkey == hotkey_pressed:	# Если комбинация клавиш подходит, то когда она не будет подходить, сработает нужное действие

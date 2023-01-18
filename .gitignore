@@ -3,3 +3,4 @@ venv/
 config.ini
 auto-py-to-exe.json
 log_records.csv
+icon.ico
