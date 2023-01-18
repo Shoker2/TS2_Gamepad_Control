@@ -17,6 +17,9 @@ class Ui_SettingsWindow(QMainWindow):
 
 	keyboard_keys = {
 		'NO KEY': 'NO KEY',
+		'LEFT MOUSE BUTTON': 'LMB',
+		'MIDDLE MOUSE BUTTON': 'MMB',
+		'RIGHT MOUSE BUTTON': 'RMB',
 		'ALT': 'alt',
 		'RIGHT ALT': 'right alt',
 		'BACKSPACE': 'backspace',

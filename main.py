@@ -7,7 +7,7 @@ import keyboard
 import sys
 import time
 import os
-import multiprocessing
+import threading
 import winreg
 
 from modules.gamepad_functions import *
@@ -25,7 +25,8 @@ class Settings_UI(Ui_SettingsWindow):
 
 		self.checkBox.setChecked(bool(int(config.read('General', 'startup'))))
 
-		hotkey = config.read('General', 'turn_on_off_hotkey').split('+')
+		hotkey = config.read('General', 'turn_on_off_hotkey')
+		hotkey = hotkey.split('+')
 		try:
 			self.firstTurn_on_ofKeysComboBox.setCurrentText(list(self.gamepad_keys.keys())[list(self.gamepad_keys.values()).index(hotkey[0])])
 			self.secondTurn_on_ofKeysComboBox.setCurrentText(list(self.gamepad_keys.keys())[list(self.gamepad_keys.values()).index(hotkey[1])])
@@ -37,10 +38,10 @@ class Settings_UI(Ui_SettingsWindow):
 		startup = self.checkBox.isChecked()
 		config.update('General', 'startup', str(int(startup)))
 
-		file_path = str(os.path.abspath(os.getcwd())) + '.exe' # Получаю путь к файлу запуска приложения
+		file_path = str(os.path.dirname(os.path.abspath(__file__))) + '\\TS2GamepadControl.exe' # Получаю путь к файлу запуска приложения
 		key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Run') # создаю ключ для автозапуска в реестре
 		if startup:
-			winreg.SetValueEx(key, 'TS2GamepadControl', 0, winreg.REG_SZ, {file_path}) # Добавляю приложение в автозапуск (в реестре)
+			winreg.SetValueEx(key, 'TS2GamepadControl', 0, winreg.REG_SZ, file_path) # Добавляю приложение в автозапуск (в реестре)
 		else:
 			try:
 				winreg.DeleteValue(key, 'TS2GamepadControl') # Удаляю приложение из автозапуска (В реестре)
@@ -50,6 +51,14 @@ class Settings_UI(Ui_SettingsWindow):
 		config.update('General', 'abs_deadzone', str(self.deadzoneSpeedSpinBox.value()))
 		config.update('General', 'mouse_speed', str(self.mouseSpeedSpinBox.value()))
 		config.update('General', 'scroll_speed', str(self.scrollSpeedSpinBox.value()))
+
+		global config_mouse_speed
+		config_mouse_speed = float(config.read('General', 'mouse_speed'))/10 # Скорость из конфига делю на 10
+
+		global config_scroll_speed
+		config_scroll_speed = float(config.read('General', 'scroll_speed'))/10 # Скорость из конфига делю на 10
+
+		gamepad_functions.ABS_deadzone = int(config.read('General', 'ABS_deadzone'))
 
 		hotkey = f'{self.gamepad_keys[self.firstTurn_on_ofKeysComboBox.currentText()]}+{self.gamepad_keys[self.secondTurn_on_ofKeysComboBox.currentText()]}'
 
@@ -68,8 +77,8 @@ class Settings_UI(Ui_SettingsWindow):
 		# После выбора кнопки геймпада из выпадающего списка устанавливается информация о кнопке из конфиг файла
 		key = self.gamepad_keys[self.gamepadKeyComboBox.currentText()]
 
-		self.useHotkeyRadioButton.setChecked(bool(int(config.read(key, 'use_hotkey'))))
-		hotkey = config.read(key, 'hotkey').split('+')
+		hotkey = config.read(key, 'hotkey')
+		hotkey = hotkey.split('+')
 
 		self.firstKeyComboBox.setCurrentText('NO KEY')
 		self.secondKeyComboBox.setCurrentText('NO KEY')
@@ -82,9 +91,14 @@ class Settings_UI(Ui_SettingsWindow):
 		except IndexError:
 			pass
 		
-		self.useCmdRadioButton.setChecked(bool(int(config.read(key, 'use_command'))))
 		self.cmdLineEdit.setText(config.read(key, 'command'))
-
+		
+		if config.read(key, 'use_hotkey') == '1':
+			self.useHotkeyRadioButton.setChecked(True)
+		
+		if config.read(key, 'use_command') == '1':
+			self.useCmdRadioButton.setChecked(True)
+		
 		if config.read(key, 'use_hotkey') != '1' and config.read(key, 'use_command') != '1':
 			self.dontUseRadioButton.setChecked(True)
 
@@ -102,9 +116,17 @@ class Tray(SystemTray):
 		self.setContextMenu(menu)
 		
 	def	exit(self):
-		main_process.terminate() # Выключаю процесс для управление геймпадом
-		Settings.close()
-		quit()
+		app.setQuitOnLastWindowClosed(True)
+
+		global working
+		working = False
+		
+		try:
+			Settings.close()
+		except NameError:
+			pass
+		
+		sys.exit(0)
 
 	def call_settings(self):
 		global Settings
@@ -124,21 +146,26 @@ def	start_tray():
 
 	sys.exit(app.exec_())
 
-def mouse_move_control(x, y): # Управление мышкой (^ V < >)
-	while True:
-		if config.read('General', 'activate') == '1':
-			if x.value != 0.0 or y.value != 0.0:
-				config_mouse_speed = float(config.read('General', 'mouse_speed'))/10 # Скорость из конфига делю на 10
-				mouse.move(x.value*config_mouse_speed, y.value*config_mouse_speed, False) # Двигаю мышь относительно текущей позиции
-			time.sleep(0.005)
+def mouse_move_control(): # Управление мышкой (^ V < >)
+	global mouse_speed_x
+	global mouse_speed_y
+	global working
+	global activate
+	global config_mouse_speed
+	while working:
+		if (mouse_speed_x != 0.0 or mouse_speed_y != 0.0) and activate:
+			mouse.move(mouse_speed_x*config_mouse_speed, mouse_speed_y*config_mouse_speed, False) # Двигаю мышь относительно текущей позиции
+		time.sleep(0.005)
 
-def mouse_scroll_control(speed): # Управление скролом
-	while True:
-		if config.read('General', 'activate') == '1':
-			if speed.value != 0.0:
-				config_scroll_speed = float(config.read('General', 'scroll_speed'))/10 # Скорость из конфига делю на 10
-				mouse.wheel(speed.value*config_scroll_speed)
-			time.sleep(0.005)
+def mouse_scroll_control(): # Управление скролом
+	global scroll_speed
+	global working
+	global activate
+	global config_scroll_speed
+	while working:
+		if scroll_speed != 0.0 and activate:
+			mouse.wheel(scroll_speed*config_scroll_speed)
+		time.sleep(0.005)
 
 class MainKeys(Keys):
 	def check_dead_zone(func): 
@@ -156,16 +183,12 @@ class MainKeys(Keys):
 		return inner
 
 	def btn_function(self, key, state):
-		if config.read('General', 'activate') == '1':
-
+		global activate
+		if activate:
 			if config.read(key, 'use_command') == '1': # Если нужно выполнить команду, то создаёт процесс и запускает в нёи эту команду
 				if state == 1:
 					global test_process
-					try:
-						test_process.terminate()
-					except:
-						pass
-					test_process = multiprocessing.Process(target=os.system, args=(config.read(key, 'command'),))
+					test_process = threading.Thread(target=os.system, args=(config.read(key, 'command'),))
 					test_process.start()
 				
 			elif config.read(key, 'use_hotkey') == '1': # Если используется комбинация клавишь
@@ -198,17 +221,17 @@ class MainKeys(Keys):
 	@check_dead_zone
 	def left_stick_x(self, state):
 		global mouse_speed_x
-		mouse_speed_x.value = state//2000
+		mouse_speed_x = state//2000
 
 	@check_dead_zone
 	def left_stick_y(self, state):
 		global mouse_speed_y
-		mouse_speed_y.value = state/-2000
+		mouse_speed_y = state/-2000
 	
 	@check_dead_zone
 	def right_stick_y(self, state):
 		global scroll_speed
-		scroll_speed.value = state/40000
+		scroll_speed = state/40000
 	
 gamepad_functions = MainKeys()
 
@@ -216,25 +239,11 @@ global config
 config = Configure('./config.ini')
 
 def main():
-	global mouse_speed_x
-	global mouse_speed_y
-	mouse_speed_x = multiprocessing.Value('d', 0.0)	# Создаю переменные для скорости мыши и связываю их с процессом для мыши
-	mouse_speed_y = multiprocessing.Value('d', 0.0)
-
-	mouse_process = multiprocessing.Process(target=mouse_move_control, args=(mouse_speed_x, mouse_speed_y))
-	mouse_process.start()
-
-	global scroll_speed
-	scroll_speed = multiprocessing.Value('d', 0.0)	# Создаю переменные для скорости скрола и связываю их с процессом для мыши
-
-	scroll_process = multiprocessing.Process(target=mouse_scroll_control, args=(scroll_speed, ))
-	scroll_process.start()
-
 	next_action = 0
-	while True:
+	global working
+	while working:
 		try:
 			events = inputs.get_gamepad() # Ждёт ивента
-			gamepad_functions.ABS_deadzone = int(config.read('General', 'ABS_deadzone'))
 
 			for event in events:
 				if event.ev_type != 'Sync':
@@ -247,26 +256,65 @@ def main():
 
 				hotkey_pressed = sorted(hotkey_pressed) # Сортирую список нажатых клавиш
 
-				turn_on_off_hotkey = sorted(config.read('General', 'turn_on_off_hotkey').split('+')) # Беру отсортированый список комбинации клавиш
+				turn_on_off_hotkey = config.read('General', 'turn_on_off_hotkey') # Беру отсортированый список комбинации клавиш
+				turn_on_off_hotkey = sorted(turn_on_off_hotkey.split('+'))
 
 				if turn_on_off_hotkey == hotkey_pressed:	# Если комбинация клавиш подходит, то когда она не будет подходить, сработает нужное действие
 					next_action = 1
 				else:
 					if next_action == 1:
 						next_action = 0
+						global activate
 						if config.read('General', 'activate') == '1':
 							config.update('General', 'activate', '0')
+							activate = False
 						else:
 							config.update('General', 'activate', '1')
+							activate = True
 
-
+		except AttributeError:
+			pass
+		
 		except inputs.UnpluggedError as r:
 			inputs.refresh_devices()
-			os.system('cls')
+			#os.system('cls')
 			print(r)
 			time.sleep(1.5)
 
 if __name__ == '__main__':
-	main_process = multiprocessing.Process(target=main)
+	global working
+	working = True
+
+	global activate
+	activate = config.read('General', 'activate')
+	if activate == '1':
+		activate = True
+	else:
+		activate = False
+
+	global config_mouse_speed
+	config_mouse_speed = float(config.read('General', 'mouse_speed'))/10 # Скорость из конфига делю на 10
+
+	global config_scroll_speed
+	config_scroll_speed = float(config.read('General', 'scroll_speed'))/10 # Скорость из конфига делю на 10
+
+	gamepad_functions.ABS_deadzone = int(config.read('General', 'ABS_deadzone'))
+
+	global mouse_speed_x
+	global mouse_speed_y
+	mouse_speed_x = 0.0	# Создаю переменные для скорости мыши и связываю их с процессом для мыши
+	mouse_speed_y = 0.0
+
+	mouse_process = threading.Thread(target=mouse_move_control)
+	mouse_process.start()
+
+	global scroll_speed
+	scroll_speed = 0.0	# Создаю переменные для скорости скрола и связываю их с процессом для мыши
+
+	scroll_process = threading.Thread(target=mouse_scroll_control)
+	scroll_process.start()
+
+	main_process = threading.Thread(target=main)
 	main_process.start()
+
 	start_tray()
