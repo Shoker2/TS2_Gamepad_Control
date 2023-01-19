@@ -418,4 +418,5 @@ if __name__ == "__main__":
 
 	Settings = Ui_SettingsWindow(SettingsWindow)
 	Settings.show()
+	
 	sys.exit(app.exec_())
