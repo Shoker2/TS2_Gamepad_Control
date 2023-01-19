@@ -11,6 +11,7 @@ import os
 import threading
 import traceback
 import getpass
+import shutil
 
 from modules.gamepad_functions import *
 from ui.Tray import SystemTray
@@ -31,7 +32,8 @@ def create_shortcut(file_name: str, target_name: str, target_dir: str, arguments
 	shortcut.WorkingDirectory = this_folder_path
 	shortcut.save()
 
-	os.replace(f"{this_folder_path}\\{file_name}", f"{target_dir}\\{file_name}")
+	shutil.move(f"{this_folder_path}\\{file_name}", f'{target_dir}\\{file_name}')
+	#os.replace(f"{this_folder_path}\\{file_name}", f"{target_dir}\\{file_name}")
 
 class Settings_UI(Ui_SettingsWindow):
 	def setup(self):
