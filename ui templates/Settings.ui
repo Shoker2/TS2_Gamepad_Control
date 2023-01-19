@@ -224,18 +224,6 @@
             </property>
            </spacer>
           </item>
-          <item>
-           <widget class="QPushButton" name="ApplyPushButton">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Apply</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
        </layout>
@@ -377,18 +365,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="ApplyKeyPushButton">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Apply key</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>

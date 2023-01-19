@@ -245,12 +245,6 @@ class Ui_SettingsWindow(QMainWindow):
 		self.horizontalLayout_6.setObjectName("horizontalLayout_6")
 		spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 		self.horizontalLayout_6.addItem(spacerItem)
-		self.ApplyPushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-		font = QtGui.QFont()
-		font.setPointSize(10)
-		self.ApplyPushButton.setFont(font)
-		self.ApplyPushButton.setObjectName("ApplyPushButton")
-		self.horizontalLayout_6.addWidget(self.ApplyPushButton)
 		self.verticalLayout.addLayout(self.horizontalLayout_6)
 		self.GeneralScrollArea.setWidget(self.scrollAreaWidgetContents)
 		self.tabWidget.addTab(self.General_page, "")
@@ -332,12 +326,6 @@ class Ui_SettingsWindow(QMainWindow):
 		self.horizontalLayout_7.setObjectName("horizontalLayout_7")
 		spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 		self.horizontalLayout_7.addItem(spacerItem1)
-		self.ApplyKeyPushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_2)
-		font = QtGui.QFont()
-		font.setPointSize(10)
-		self.ApplyKeyPushButton.setFont(font)
-		self.ApplyKeyPushButton.setObjectName("ApplyKeyPushButton")
-		self.horizontalLayout_7.addWidget(self.ApplyKeyPushButton)
 		self.verticalLayout_2.addLayout(self.horizontalLayout_7)
 		self.KeysScrollArea.setWidget(self.scrollAreaWidgetContents_2)
 		self.tabWidget.addTab(self.Keys_page, "")
@@ -353,23 +341,35 @@ class Ui_SettingsWindow(QMainWindow):
 		self.deadzoneSpeedLlabel.setText(_translate("SettingsWindow", "Dead Zone"))
 		self.turn_on_ofLlabel.setText(_translate("SettingsWindow", "Turn off/on hotkey"))
 		self.checkBox.setText(_translate("SettingsWindow", "Add to startup"))
-		self.ApplyPushButton.setText(_translate("SettingsWindow", "Apply"))
 		self.tabWidget.setTabText(self.tabWidget.indexOf(self.General_page), _translate("SettingsWindow", "General"))
 		self.gamepadKeyLabel.setText(_translate("SettingsWindow", "Key"))
 		self.dontUseRadioButton.setText(_translate("SettingsWindow", "Don\'t use"))
 		self.useHotkeyRadioButton.setText(_translate("SettingsWindow", "Use hotkey"))
 		self.useCmdRadioButton.setText(_translate("SettingsWindow", "Use cmd command"))
-		self.ApplyKeyPushButton.setText(_translate("SettingsWindow", "Apply key"))
 		self.tabWidget.setTabText(self.tabWidget.indexOf(self.Keys_page), _translate("SettingsWindow", "Keys"))
 
 		self.resized.connect(self.auto_resize) # Делаю ивент на изменение размера окна
-		self.ApplyKeyPushButton.clicked.connect(lambda: self.apply_key())
-		self.ApplyPushButton.clicked.connect(lambda: self.apply_general())
+
 		self.gamepadKeyComboBox.currentTextChanged.connect(lambda: self.set_key_properties())
 
 		self.resize(500, 350)
 		self.setup()
-	
+
+		self.firstKeyComboBox.currentTextChanged.connect(lambda: self.apply_key())
+		self.secondKeyComboBox.currentTextChanged.connect(lambda: self.apply_key())
+		self.thirdKeyComboBox.currentTextChanged.connect(lambda: self.apply_key())
+
+		self.dontUseRadioButton.toggled.connect(lambda: self.apply_key())
+		self.useHotkeyRadioButton.toggled.connect(lambda: self.apply_key())
+		self.useCmdRadioButton.toggled.connect(lambda: self.apply_key())
+
+		self.firstTurn_on_ofKeysComboBox.currentTextChanged.connect(lambda: self.apply_general())
+		self.secondTurn_on_ofKeysComboBox.currentTextChanged.connect(lambda: self.apply_general())
+		self.checkBox.toggled.connect(lambda: self.apply_general())
+		self.mouseSpeedSpinBox.valueChanged.connect(lambda: self.apply_general())
+		self.scrollSpeedSpinBox.valueChanged.connect(lambda: self.apply_general())
+		self.deadzoneSpeedSpinBox.valueChanged.connect(lambda: self.apply_general())
+
 	def resizeEvent(self, event):
 		self.resized.emit()
 		return super(Ui_SettingsWindow, self).resizeEvent(event)
