@@ -292,7 +292,7 @@ class MainKeys(Keys):
 						elif hotkey in func:
 							if hotkey == 'SK':
 								if state == 1:
-									test_process = threading.Thread(target=os.system, args=("cd SimpleKeyboard & TS2_SimpleKeyboard.exe", ), daemon=True)
+									test_process = threading.Thread(target=os.system, args=("cd SimpleKeyboard & start TS2_SimpleKeyboard.exe", ), daemon=True)
 									test_process.start()
 									del test_process
 
