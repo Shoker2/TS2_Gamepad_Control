@@ -121,8 +121,22 @@ class Settings_UI(Ui_SettingsWindow):
 			# После выбора кнопки геймпада из выпадающего списка устанавливается информация о кнопке из конфиг файла
 			key = self.gamepad_keys[self.gamepadKeyComboBox.currentText()]
 
+			use_hotkey = config.read(key, 'use_hotkey')
+			use_command =  config.read(key, 'use_command')
+
 			hotkey = config.read(key, 'hotkey')
 			hotkey = hotkey.split('+')
+
+			self.cmdLineEdit.setText(config.read(key, 'command'))
+			
+			if use_hotkey == '1':
+				self.useHotkeyRadioButton.setChecked(True)
+			
+			if use_command == '1':
+				self.useCmdRadioButton.setChecked(True)
+			
+			if use_hotkey != '1' and use_command != '1':
+				self.dontUseRadioButton.setChecked(True)
 
 			self.firstKeyComboBox.setCurrentText('NO KEY')
 			self.secondKeyComboBox.setCurrentText('NO KEY')
@@ -134,17 +148,6 @@ class Settings_UI(Ui_SettingsWindow):
 				self.thirdKeyComboBox.setCurrentText(hotkey[2])
 			except IndexError:
 				pass
-			
-			self.cmdLineEdit.setText(config.read(key, 'command'))
-			
-			if config.read(key, 'use_hotkey') == '1':
-				self.useHotkeyRadioButton.setChecked(True)
-			
-			if config.read(key, 'use_command') == '1':
-				self.useCmdRadioButton.setChecked(True)
-			
-			if config.read(key, 'use_hotkey') != '1' and config.read(key, 'use_command') != '1':
-				self.dontUseRadioButton.setChecked(True)
 		
 		except Exception:
 			logger.logging.error(traceback.format_exc().replace('"', '\''))
