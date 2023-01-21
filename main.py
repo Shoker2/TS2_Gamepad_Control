@@ -105,7 +105,7 @@ class Settings_UI(Ui_SettingsWindow):
 
 	def apply_key(self):
 		try:
-			# После нажатия кнопки "Apply" во вкладки Key я сохраняю данные для выбранной кнопки геймпада в конфиг файл
+			# сохраняю данные для выбранной кнопки геймпада в конфиг файл
 			key = self.get_key_properties()
 
 			config.update(key['key'], 'use_command', key['use_command'])

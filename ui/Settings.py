@@ -362,6 +362,7 @@ class Ui_SettingsWindow(QMainWindow):
 		self.dontUseRadioButton.toggled.connect(lambda: self.apply_key())
 		self.useHotkeyRadioButton.toggled.connect(lambda: self.apply_key())
 		self.useCmdRadioButton.toggled.connect(lambda: self.apply_key())
+		self.cmdLineEdit.textChanged.connect(lambda: self.apply_key())
 
 		self.firstTurn_on_ofKeysComboBox.currentTextChanged.connect(lambda: self.apply_general())
 		self.secondTurn_on_ofKeysComboBox.currentTextChanged.connect(lambda: self.apply_general())
