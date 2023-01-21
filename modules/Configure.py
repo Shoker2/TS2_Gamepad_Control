@@ -25,7 +25,7 @@ class Configure:
 				'use_command': '0',
 				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'MIDDLE MOUSE BUTTON'
+				'hotkey': 'ENTER'
 			}
 			self.config['D_Pad_up'] = {
 				'use_command': '0',
@@ -89,9 +89,9 @@ class Configure:
 			}
 			self.config['RB'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'CTRL+V'
 			}
 			self.config['RT'] = {
 				'use_command': '0',
@@ -101,9 +101,9 @@ class Configure:
 			}
 			self.config['LB'] = {
 				'use_command': '0',
-				'use_hotkey': '0',
+				'use_hotkey': '1',
 				'command': '',
-				'hotkey': 'No Key'
+				'hotkey': 'SIMPLE KEYBOARD'
 			}
 			self.config['LT'] = {
 				'use_command': '0',

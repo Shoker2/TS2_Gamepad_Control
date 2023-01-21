@@ -20,6 +20,7 @@ class Ui_SettingsWindow(QMainWindow):
 		'LEFT MOUSE BUTTON': 'LMB',
 		'MIDDLE MOUSE BUTTON': 'MMB',
 		'RIGHT MOUSE BUTTON': 'RMB',
+		'SIMPLE KEYBOARD': 'SK',
 		'ALT': 'alt',
 		'RIGHT ALT': 'right alt',
 		'BACKSPACE': 'backspace',

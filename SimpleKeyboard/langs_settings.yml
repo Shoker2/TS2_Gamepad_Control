@@ -1,0 +1,29 @@
+Endlish:
+  font: "MS Shell Diq 2"
+  symbol buttons point size: 34
+  lineEdit button point size: 16
+  space button point size: 23
+  up buttons point size: 18
+  down buttons point size: 18
+  copy button text: "Copy"
+  paste button text: "Paste"
+  clear button text: "Clear"
+  space button text: "Space"
+  backspace button text: "Backspace"
+  change language button text: "Change language"
+  shift button text: "Shift"
+
+Russian:
+  font: "MS Shell Diq 2"
+  symbol buttons point size: 34
+  lineEdit button point size: 16
+  space button point size: 23
+  up buttons point size: 18
+  down buttons point size: 18
+  copy button text: "Копировать"
+  paste button text: "Вставить"
+  clear button text: "Отчистить"
+  space button text: "Пробел"
+  backspace button text: "Стереть"
+  change language button text: "Сменить язык"
+  shift button text: "Shift"

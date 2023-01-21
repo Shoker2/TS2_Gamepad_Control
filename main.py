@@ -270,7 +270,9 @@ class MainKeys(Keys):
 					hotkeys = config.read(key, 'hotkey')
 
 					mouse_ = ['RMB', 'LMB', 'MMB']
-					notkeyboard = mouse_
+					func = ['SK']
+
+					notkeyboard = mouse_ + func
 					
 					for hotkey in list(map(str, hotkeys.split('+'))):
 						hotkey = Settings_UI.keyboard_keys[hotkey]
@@ -286,6 +288,13 @@ class MainKeys(Keys):
 								time.sleep(0.01)
 							else:
 								mouse.release(mouse_keys[hotkey])
+						
+						elif hotkey in func:
+							if hotkey == 'SK':
+								if state == 1:
+									test_process = threading.Thread(target=os.system, args=("cd SimpleKeyboard & TS2_SimpleKeyboard.exe", ), daemon=True)
+									test_process.start()
+									del test_process
 
 		except Exception:
 			logger.logging.error(traceback.format_exc().replace('"', '\''))
